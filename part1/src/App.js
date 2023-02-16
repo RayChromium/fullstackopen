@@ -1,22 +1,33 @@
 const App = () => {
-  const course = 'Half Stack application development';
-  const part1 = 'Fundamentals of React';
-  const exercises1 = 10;
-  const part2 = 'Using props to pass data';
-  const exercises2 = 7;
-  const part3 = 'State of a component';
-  const exercises3 = 14;
+  const course = {
+    name: 'Half Stack application development',
+    parts: [
+      {
+        name: 'Fundamentals of React',
+        exercises: 10
+      },
+      {
+        name: 'Using props to pass data',
+        exercises: 7
+      },
+      {
+        name: 'State of a component',
+        exercises: 14
+      }
+    ]
+  };
 
   return (
     <div>
-      <Header course={course} />
-      <Content part1={part1} part2={part2} part3={part3} e1={exercises1} e2={exercises2} e3={exercises3} />
-      <Total total={exercises1 + exercises2 + exercises3} />
+      <Header course={course.name} />
+      <Content parts={course.parts} />
+      <Total parts={course.parts} />
     </div>
   )
 }
 
 const Header = (props) => {
+  console.log(props);
   return (
     <>
       <h1>
@@ -27,11 +38,13 @@ const Header = (props) => {
 }
 
 const Content = (props) => {
+  // assuming there are exactly 3 items in the parts array
+  console.log('props in Content():' , props);
   return (
     <>
-    <Part p={props.part1} e={props.e1} />
-    <Part p={props.part2} e={props.e2} />
-    <Part p={props.part3} e={props.e3} />
+    <Part p={props.parts[0].name} e={props.parts[0].exercises} />
+    <Part p={props.parts[1].name} e={props.parts[1].exercises} />
+    <Part p={props.parts[2].name} e={props.parts[2].exercises} />
     </>
   )
 }
@@ -45,9 +58,14 @@ const Part = (props) => {
 }
 
 const Total = (props) =>{
+  let total = 0;
+  console.log('props in Total: ', props);
+  props.parts.forEach((p)=>{
+    total += p.exercises;
+  });
   return (
     <>
-     <p>Number of exercises {props.total}</p>
+     <p>Number of exercises {total}</p>
     </>
   )
 }
