@@ -1,51 +1,72 @@
-import logo from './logo.svg';
-import './App.css';
-
-// function App() {
-//   return (
-//     <div className="App">
-//       <header className="App-header">
-//         <img src={logo} className="App-logo" alt="logo" />
-//         <p>
-//           Edit <code>src/App.js</code> and save to reload.
-//         </p>
-//         <a
-//           className="App-link"
-//           href="https://reactjs.org"
-//           target="_blank"
-//           rel="noopener noreferrer"
-//         >
-//           Learn React
-//         </a>
-//       </header>
-//     </div>
-//   );
-// }
-
 const App = () => {
-  const now = new Date();
-  const a = 10;
-  const b = 20;
+  const course = {
+    name: 'Half Stack application development',
+    parts: [
+      {
+        name: 'Fundamentals of React',
+        exercises: 10
+      },
+      {
+        name: 'Using props to pass data',
+        exercises: 7
+      },
+      {
+        name: 'State of a component',
+        exercises: 14
+      }
+    ]
+  };
 
-  const name = 'Peter';
-  const age = 10;
-
-  console.log(now, a+b);
   return (
     <div>
-      <Hello name='Ray' age={15+10}/>
-      <Hello name={name} age={age} />
-      <p>Hello World! It is {now.toString()}</p>
+      <Header course={course.name} />
+      <Content parts={course.parts} />
+      <Total parts={course.parts} />
     </div>
   )
 }
 
-const Hello = (props) => {
+const Header = (props) => {
+  console.log(props);
   return (
-    <div>
-      <h1>Greetings {props.name}, </h1>
-      <p>Hello {props.name}, you are {props.age} years old.</p>
-    </div>
+    <>
+      <h1>
+        {props.course}
+      </h1>
+    </>
+  )
+}
+
+const Content = (props) => {
+  // assuming there are exactly 3 items in the parts array
+  console.log('props in Content():' , props);
+  return (
+    <>
+    <Part p={props.parts[0].name} e={props.parts[0].exercises} />
+    <Part p={props.parts[1].name} e={props.parts[1].exercises} />
+    <Part p={props.parts[2].name} e={props.parts[2].exercises} />
+    </>
+  )
+}
+
+const Part = (props) => {
+  return (
+    <>
+    <p>{props.p} {props.e}</p>
+    </>
+  )
+}
+
+const Total = (props) =>{
+  let total = 0;
+  console.log('props in Total: ', props);
+  props.parts.forEach((p)=>{
+    total += p.exercises;
+  });
+  return (
+    <>
+     <p>Number of exercises {total}</p>
+    </>
   )
 }
 
