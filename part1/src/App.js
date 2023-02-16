@@ -1,51 +1,54 @@
-import logo from './logo.svg';
-import './App.css';
-
-// function App() {
-//   return (
-//     <div className="App">
-//       <header className="App-header">
-//         <img src={logo} className="App-logo" alt="logo" />
-//         <p>
-//           Edit <code>src/App.js</code> and save to reload.
-//         </p>
-//         <a
-//           className="App-link"
-//           href="https://reactjs.org"
-//           target="_blank"
-//           rel="noopener noreferrer"
-//         >
-//           Learn React
-//         </a>
-//       </header>
-//     </div>
-//   );
-// }
-
 const App = () => {
-  const now = new Date();
-  const a = 10;
-  const b = 20;
+  const course = 'Half Stack application development';
+  const part1 = 'Fundamentals of React';
+  const exercises1 = 10;
+  const part2 = 'Using props to pass data';
+  const exercises2 = 7;
+  const part3 = 'State of a component';
+  const exercises3 = 14;
 
-  const name = 'Peter';
-  const age = 10;
-
-  console.log(now, a+b);
   return (
     <div>
-      <Hello name='Ray' age={15+10}/>
-      <Hello name={name} age={age} />
-      <p>Hello World! It is {now.toString()}</p>
+      <Header course={course} />
+      <Content part1={part1} part2={part2} part3={part3} e1={exercises1} e2={exercises2} e3={exercises3} />
+      <Total total={exercises1 + exercises2 + exercises3} />
     </div>
   )
 }
 
-const Hello = (props) => {
+const Header = (props) => {
   return (
-    <div>
-      <h1>Greetings {props.name}, </h1>
-      <p>Hello {props.name}, you are {props.age} years old.</p>
-    </div>
+    <>
+      <h1>
+        {props.course}
+      </h1>
+    </>
+  )
+}
+
+const Content = (props) => {
+  return (
+    <>
+    <Part p={props.part1} e={props.e1} />
+    <Part p={props.part2} e={props.e2} />
+    <Part p={props.part3} e={props.e3} />
+    </>
+  )
+}
+
+const Part = (props) => {
+  return (
+    <>
+    <p>{props.p} {props.e}</p>
+    </>
+  )
+}
+
+const Total = (props) =>{
+  return (
+    <>
+     <p>Number of exercises {props.total}</p>
+    </>
   )
 }
 
