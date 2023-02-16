@@ -23,10 +23,28 @@ import './App.css';
 // }
 
 const App = () => {
-  console.log('Hello from component');
+  const now = new Date();
+  const a = 10;
+  const b = 20;
+
+  const name = 'Peter';
+  const age = 10;
+
+  console.log(now, a+b);
   return (
     <div>
-      <p>Hello World!</p>
+      <Hello name='Ray' age={15+10}/>
+      <Hello name={name} age={age} />
+      <p>Hello World! It is {now.toString()}</p>
+    </div>
+  )
+}
+
+const Hello = (props) => {
+  return (
+    <div>
+      <h1>Greetings {props.name}, </h1>
+      <p>Hello {props.name}, you are {props.age} years old.</p>
     </div>
   )
 }
