@@ -1,72 +1,43 @@
-const App = () => {
-  const course = {
-    name: 'Half Stack application development',
-    parts: [
-      {
-        name: 'Fundamentals of React',
-        exercises: 10
-      },
-      {
-        name: 'Using props to pass data',
-        exercises: 7
-      },
-      {
-        name: 'State of a component',
-        exercises: 14
-      }
-    ]
-  };
+const Hello = (props) => {
+  // Destructuring 
+  const {name, age} = props;
+  // component helper function
+  const bornYear = () => new Date().getFullYear() - age;
+
+
 
   return (
     <div>
-      <Header course={course.name} />
-      <Content parts={course.parts} />
-      <Total parts={course.parts} />
+      <p>
+        Hello {name}, you are {age} years old
+      </p>
+      <p>So you are probably born in {bornYear()}</p>
     </div>
   )
 }
 
-const Header = (props) => {
-  console.log(props);
+const App = (props) => {
+  const {counter} = props;
+  const name = 'Peter'
+  const age = 10
+
   return (
-    <>
-      <h1>
-        {props.course}
-      </h1>
-    </>
+    <div>
+      <h1>Greetings</h1>
+      <Hello name="Maya" age={26 + 10} />
+      <Hello name={name} age={age} />
+      <Counter counter={counter} />
+    </div>
   )
 }
 
-const Content = (props) => {
-  // assuming there are exactly 3 items in the parts array
-  console.log('props in Content():' , props);
+// a counter component:
+const Counter = (props) => {
+  const {counter} = props;
   return (
-    <>
-    <Part p={props.parts[0].name} e={props.parts[0].exercises} />
-    <Part p={props.parts[1].name} e={props.parts[1].exercises} />
-    <Part p={props.parts[2].name} e={props.parts[2].exercises} />
-    </>
-  )
-}
-
-const Part = (props) => {
-  return (
-    <>
-    <p>{props.p} {props.e}</p>
-    </>
-  )
-}
-
-const Total = (props) =>{
-  let total = 0;
-  console.log('props in Total: ', props);
-  props.parts.forEach((p)=>{
-    total += p.exercises;
-  });
-  return (
-    <>
-     <p>Number of exercises {total}</p>
-    </>
+    <div>
+      {counter}
+    </div>
   )
 }
 
