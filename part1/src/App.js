@@ -18,6 +18,34 @@ const Hello = (props) => {
   )
 }
 
+const History = (props) => {
+  if(props.allClicks.length === 0) {
+    return (
+      <div>
+        the app is used by pressing the buttons
+      </div>
+    )
+  }
+  return (
+    <div>
+      button press history: {props.allClicks.join(' ')}
+    </div>
+  )
+  
+}
+
+const Statistics = (props) =>{
+  return (
+    <>
+      Good : <Display counter={props.good}/> 
+      Neutual : <Display counter={props.nuetral}/> 
+      Bad : <Display counter={props.bad}/> 
+      average : {props.totalVote === 0 ? 0 : (props.good + props.bad) / props.totalVote}  
+      positive : { props.totalVote === 0 ? 0 : props.good / props.totalVote }
+    </>
+  )
+}
+
 const App = () => {
 
 
@@ -95,21 +123,15 @@ const App = () => {
     setRight(right + 1);
   }
 
-  const History = (props) => {
-    if(props.allClicks.length === 0) {
-      return (
-        <div>
-          the app is used by pressing the buttons
-        </div>
-      )
-    }
-    return (
-      <div>
-        button press history: {props.allClicks.join(' ')}
-      </div>
-    )
-    
-  }
+  
+
+  // Exercise 1.6 - 1.14
+  // save clicks of each button to its own state
+  const [good, setGood] = useState(0);
+  const [nuetral, setNuetral] = useState(0);
+  const [bad, setBad] = useState(0);
+  const [totalVote, setTotalVote] = useState(0);
+
 
   const name = 'Peter'
   const age = 10
@@ -134,6 +156,21 @@ const App = () => {
       <Button onClick={() => setToValue(1000)} text='thousand'/>
       <Button onClick={() => setToValue(0)} text='reset'/>
       <Button onClick={() => setToValue(value + 1)} text='increment'/>
+      <h3>Exercise 1.6 - 1.14</h3>
+      <h4>1.6 Unicafe</h4>
+      <Statistics good={good} nuetral={nuetral} bad={bad} totalVote={totalVote}/>
+      <Button onClick={() => {
+        setGood(good + 1);
+        setTotalVote(totalVote + 1)
+      }}  text='Good'/>
+      <Button onClick={() => {
+        setNuetral(nuetral + 1);
+        setTotalVote(totalVote + 1);
+      }}  text='Neutral'/>
+      <Button onClick={() => {
+        setBad(bad + 1);
+        setTotalVote(totalVote + 1);
+      }}  text='Bad'/>
     </div>
   )
 }
