@@ -10,11 +10,15 @@ const Header = (props) => {
 }
 
 const Total = (props) =>{
-    let total = 0;
     console.log('props in Total: ', props);
-    props.parts.forEach((p)=>{
-      total += p.exercises;
-    });
+    // props.parts.forEach((p)=>{
+    //   total += p.exercises;
+    // });
+    const total = props.parts.reduce((s, p) => {
+      console.log('what is happening', s, p)
+      return s + p.exercises; 
+    }, 0);
+    console.log('total1 : ', total);
     return (
       <>
        <p>Number of exercises {total}</p>
