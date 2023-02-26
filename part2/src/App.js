@@ -13,8 +13,12 @@ const App = () => {
       name: newName,
     }
 
-    setPersons(persons.concat(newPerson));
-    setNewName('');
+    if( persons.findIndex( person => person.name === newName ) === -1 ) {
+      setPersons(persons.concat(newPerson));
+      setNewName('');
+    } else {
+      window.alert(`${newName} is already added to phonebook`);
+    }
   }
 
   const handleNameInput = (e) => {
