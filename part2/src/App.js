@@ -1,50 +1,40 @@
-import './App.css';
-import {useState} from 'react';
-import Note from './components/Note'
+import { useState } from 'react'
 
+const App = () => {
+  const [persons, setPersons] = useState([
+    { name: 'Arto Hellas' }
+  ]) 
+  const [newName, setNewName] = useState('')
 
-const App = (props) => {
-  const [notes, setNotes] = useState(props.notes);
-  const [newNote, setNewNote] = useState('a new note...');
-  const [showAll, setShowAll] = useState(true);
-
-  const notesToShow = showAll ? notes : notes.filter( note => note.important === true );
-
-  const addNote = (event) => {
-    event.preventDefault();
-    console.log('addNote button pressed ', event.target);
-    const noteObject = {
-      content: newNote,
-      important : Math.random() < 0.5, 
-      id: notes.length + 1,
+  const addEntry = (e) => {
+    e.preventDefault();
+    console.log('add button pressed, value in input:', newName);
+    const newPerson = {
+      name: newName,
     }
 
-    setNotes(notes.concat(noteObject));
-    setNewNote('');
+    setPersons(persons.concat(newPerson));
+    setNewName('');
   }
 
-  const handleNoteChange = (event) => {
-    console.log('target value of handleNoteChange',event.target.value);
-    setNewNote(event.target.value);
+  const handleNameInput = (e) => {
+    console.log(e.target.value);
+    setNewName(e.target.value);
   }
 
   return (
     <div>
-      <h1>Notes</h1>
-      <div>
-        <button onClick={() => setShowAll(!showAll)}>
-          Show {showAll ? 'important' : 'all'}
-        </button>
-      </div>
-      NB: notice the curly baces wrapping note.content in the li tag
-      li element must have a "key" property
-      <ul>
-        {notesToShow.map(note => <Note key={note.id} note={note}/>)}
-      </ul>
-      <form onSubmit={addNote}>
-        <input value={newNote}  onChange={handleNoteChange}/>
-        <button type='submit'>save</button>
+      <h2>Phonebook</h2>
+      <form>
+        <div>
+          name: <input value={newName} onChange={handleNameInput}/>
+        </div>
+        <div>
+          <button type="submit" onClick={addEntry}>add</button>
+        </div>
       </form>
+      <h2>Numbers</h2>
+      {persons.map( person => <p key={person.name}>{person.name}</p> )}
     </div>
   )
 }
