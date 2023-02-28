@@ -55,6 +55,10 @@ const App = () => {
           console.log(`importance of ${id} changed via PUT request by axios`);
           setNotes( notes.map( n => n.id === id ? returnedNote : n ) );
          } )
+         .catch( error => {
+          alert(`The note ${note.content} was already deleted from the server`);
+          setNotes( notes.filter(note => note.id !== id) );
+         } );
   }
 
   return (

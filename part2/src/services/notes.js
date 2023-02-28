@@ -17,8 +17,5 @@ const update = (id, newObject) => {
                 .then(res => res.data);
 }
 
-export default {
-    getAll: getAll,
-    create:create,
-    update:update
-};
+//Since the names of the keys and the assigned variables are the same, we can write the object definition with a more compact syntax (ES6 feature):
+export default { getAll, create, update };
