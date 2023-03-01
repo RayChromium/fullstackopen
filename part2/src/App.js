@@ -29,7 +29,9 @@ const App = () => {
       id: persons.length + 1,
     }
 
-    if( persons.findIndex( person => person.name === newName ) === -1 ) {
+    const targetIndex = persons.findIndex( person => person.name === newName );
+
+    if( targetIndex === -1 ) {
       numberService.addNewEntry(newPerson)
            .then( res => {
             console.log('newPerson added to server, respond:', res);
@@ -42,7 +44,14 @@ const App = () => {
             alert('add fail');
            } )
     } else {
-      window.alert(`${newName} is already added to phonebook`);
+      newPerson.id = targetIndex + 1;
+      numberService.updateEntry( newPerson.id, newPerson )
+                   .then( addRes => {
+                    console.log( `update ${newPerson.name} success, respond:`, addRes);
+                   } );
+      setPersons( persons.map( p => p.id !== newPerson.id ? p : newPerson ) );
+      setNewName('');
+      setNewNumber('');
     }
   }
 
@@ -61,7 +70,7 @@ const App = () => {
       <h2>Phonebook</h2>
       <Filter setSearchTarget={setSearchTarget}/>
       <h2>add a new</h2>
-      <PersonForm newName={newName} handleNameInput={handleNameInput} newNumber={newNumber} handleNumberInput={handleNumberInput} addEntry={addEntry}/>
+      <PersonForm newName={newName} handleNameInput={handleNameInput} newNumber={newNumber} handleNumberInput={handleNumberInput} addEntry={addEntry} persons={persons}/>
       <h2>Numbers</h2>
       <Persons persons={persons} searchTarget={searchTarget} setPersons={setPersons}/>
     </div>

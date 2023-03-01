@@ -1,5 +1,5 @@
 const PersonForm = (props) => {
-    const {newName, handleNameInput, newNumber, handleNumberInput, addEntry} = props;
+    const {newName, handleNameInput, newNumber, handleNumberInput, addEntry, persons} = props;
   
     return (
       <form>
