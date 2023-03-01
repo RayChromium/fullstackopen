@@ -63,7 +63,7 @@ const App = () => {
       <h2>add a new</h2>
       <PersonForm newName={newName} handleNameInput={handleNameInput} newNumber={newNumber} handleNumberInput={handleNumberInput} addEntry={addEntry}/>
       <h2>Numbers</h2>
-      <Persons persons={persons} searchTarget={searchTarget}/>
+      <Persons persons={persons} searchTarget={searchTarget} setPersons={setPersons}/>
     </div>
   )
 }

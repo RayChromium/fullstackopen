@@ -12,4 +12,9 @@ const addNewEntry = (newPerson) => {
                 .then( res => res.data );
 }
 
-export default { getAll, addNewEntry };
+const deleteEntry = (id, person) => {
+    return axios.delete( `${baseUrl}/${id}`, person )
+                .then( res => res.data );
+}
+
+export default { getAll, addNewEntry, deleteEntry };
