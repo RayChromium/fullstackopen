@@ -18,14 +18,22 @@ const Persons = (props) => {
         if(searchTarget === '') {
           return <p key={person.id}>
                   {person.name}: {person.number}
-                  <button onClick={() => handleDeleteOf(person)}>Delete</button>
+                  <button onClick={() => {
+                    if(window.confirm(`Delete ${person.name} from phonebook?`)) {
+                      handleDeleteOf(person)}
+                    }
+                  }>Delete</button>
                 </p>
         }
   
         if( person.name.toLocaleLowerCase().indexOf(searchTarget) !== -1 ) {
           return <p key={person.id}>
                   {person.name}: {person.number}
-                  <button onClick={() => handleDeleteOf(person)}>Delete</button>
+                  <button onClick={() => {
+                    if(window.confirm(`Delete ${person.name} from phonebook?`)) {
+                      handleDeleteOf(person)}
+                    }
+                  }>Delete</button>
                 </p>
         }
         //it works?
