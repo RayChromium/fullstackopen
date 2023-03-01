@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import Filter from './components/Filter';
 import PersonForm from './components/PersonForm';
 import Persons from './components/Persons';
-import axios from 'axios';
+import numberService from './services/numbers';
 
 const App = () => {
   const [searchTarget, setSearchTarget] = useState('');
@@ -12,11 +12,11 @@ const App = () => {
 
   useEffect( () => {
     console.log('effect: fetch persons with axios from json-server');
-    axios
-      .get('http://localhost:3001/persons')
-      .then( res => {
-        console.log('axios fullfiled, response: ' , res);
-        setPersons(res.data);
+    numberService
+      .getAll()
+      .then( initialNumbers => {
+        console.log('get Numbers done, response: ' , initialNumbers);
+        setPersons(initialNumbers);
       } );
   }, [] );
 
@@ -30,7 +30,7 @@ const App = () => {
     }
 
     if( persons.findIndex( person => person.name === newName ) === -1 ) {
-      axios.post('http://localhost:3001/persons', newPerson)
+      numberService.addNewEntry(newPerson)
            .then( res => {
             console.log('newPerson added to server, respond:', res);
             setPersons(persons.concat(newPerson));
@@ -38,6 +38,7 @@ const App = () => {
             setNewNumber('');
            } )
            .catch( err => {
+            console.error('can\'t add to server, error:', err);
             alert('add fail');
            } )
     } else {
