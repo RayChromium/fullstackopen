@@ -4,11 +4,32 @@ import PersonForm from './components/PersonForm';
 import Persons from './components/Persons';
 import numberService from './services/numbers';
 
+const Notification = ({message}) => {
+  if(message === null) {
+    return null;
+  }
+
+  if(message.level === 'info') {
+    return (
+      <div className='message'>
+        {message.content}
+      </div>
+    )
+  } else if(message.level === 'error') {
+    return (
+      <div className='message-error'>
+        {message.content}
+      </div>
+    )
+  }
+}
+
 const App = () => {
   const [searchTarget, setSearchTarget] = useState('');
   const [persons, setPersons] = useState([]);
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('');
+  const [message, setMessage] = useState(null);
 
   useEffect( () => {
     console.log('effect: fetch persons with axios from json-server');
@@ -36,6 +57,8 @@ const App = () => {
            .then( res => {
             console.log('newPerson added to server, respond:', res);
             setPersons(persons.concat(newPerson));
+            setMessage({level : 'info', content : `${newPerson.name} added to server`});
+            setTimeout( () => setMessage(null), 3000 );
             setNewName('');
             setNewNumber('');
            } )
@@ -68,6 +91,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={message} />
       <Filter setSearchTarget={setSearchTarget}/>
       <h2>add a new</h2>
       <PersonForm newName={newName} handleNameInput={handleNameInput} newNumber={newNumber} handleNumberInput={handleNumberInput} addEntry={addEntry} persons={persons}/>
