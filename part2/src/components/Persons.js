@@ -2,13 +2,17 @@ import numberService from '../services/numbers';
 
 
 const Persons = (props) => {
-    const {persons, searchTarget, setPersons} = props;
+    const {persons, searchTarget, setPersons, setMessage} = props;
 
     const handleDeleteOf = (person) => {
       numberService.deleteEntry(person.id, person)
                    .then( deleteRes => {
                     console.log(`${person.name} info deleted, respond:`, deleteRes);
                     setPersons( persons.filter( p => p.id !== person.id ) ) ;
+                   } )
+                   .catch( error => {
+                    setMessage({level:'error', content:`err:${error}`});
+                    setTimeout( () =>setMessage(null) , 3000 );
                    } );
     };
 

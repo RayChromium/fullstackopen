@@ -3,26 +3,7 @@ import Filter from './components/Filter';
 import PersonForm from './components/PersonForm';
 import Persons from './components/Persons';
 import numberService from './services/numbers';
-
-const Notification = ({message}) => {
-  if(message === null) {
-    return null;
-  }
-
-  if(message.level === 'info') {
-    return (
-      <div className='message'>
-        {message.content}
-      </div>
-    )
-  } else if(message.level === 'error') {
-    return (
-      <div className='message-error'>
-        {message.content}
-      </div>
-    )
-  }
-}
+import Notification from './components/Notification';
 
 const App = () => {
   const [searchTarget, setSearchTarget] = useState('');
@@ -96,7 +77,7 @@ const App = () => {
       <h2>add a new</h2>
       <PersonForm newName={newName} handleNameInput={handleNameInput} newNumber={newNumber} handleNumberInput={handleNumberInput} addEntry={addEntry} persons={persons}/>
       <h2>Numbers</h2>
-      <Persons persons={persons} searchTarget={searchTarget} setPersons={setPersons}/>
+      <Persons persons={persons} searchTarget={searchTarget} setPersons={setPersons} setMessage={setMessage}/>
     </div>
   )
 }
