@@ -27,6 +27,23 @@ app.get('/api/notes', (request, response) => {
     response.json(notes);
 });
 
+app.get('/api/notes/:id', (request, response) => {
+    // console.log('request.params.id:',request.params.id);
+    const id = Number(request.params.id);
+    const note = notes.find( note => {
+        // console.log(note.id, typeof note.id, id, typeof id, note.id === id);
+        return note.id === id;
+      } );
+    // console.log('note:',note);
+
+    // undifined will be false. other things are true(including null)
+    if(note) {
+        response.json(note);
+    } else {
+        response.status(404).end();
+    }
+});
+
 const PORT = 3001;
 
 app.listen(PORT,()=>{
