@@ -44,6 +44,17 @@ app.get('/api/notes/:id', (request, response) => {
     }
 });
 
+app.delete( '/api/notes/:id', (request, response) => {
+    const id = Number(request.params.id);
+    console.log('id:', id, ' type of id:', typeof id);
+    notes = notes.filter( note => note.id !== id );
+
+    // https://www.rfc-editor.org/rfc/rfc9110.html#name-204-no-content
+    // 204 No Content
+    // The 204 (No Content) status code indicates that the server has successfully fulfilled the request and that there is no additional content to send in the response content.
+    response.status(204).end();
+} );
+
 const PORT = 3001;
 
 app.listen(PORT,()=>{
