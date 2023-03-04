@@ -33,6 +33,15 @@ app.get( '/', (request, response) => {
     response.send('<h1>Hello! This is the server running for part3 exercise</h1>');
 } );
 
+app.get( '/info', (request, response) => {
+    console.log(request.body);
+    const date = new Date();
+    response.send(`
+        <p>Phonebook has info for ${persons.length} people</p>
+        <p>${date[Symbol.toPrimitive]('string')}</p>
+    `);
+} );
+
 const PORT = 3001;
 
 app.listen( PORT, () => {
