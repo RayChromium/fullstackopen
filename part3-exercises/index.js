@@ -29,6 +29,18 @@ app.get( '/api/persons', (request, response) => {
     response.json(persons);
 } );
 
+app.get( '/api/persons/:id', (request, response) => {
+    const id = Number(request.params.id);
+    console.log(`id: ${id}, type: ${typeof id}`);
+    const person = persons.find( p => p.id === id );
+    console.log(`person: ${person}`);
+    if(person) {
+        response.json(person);
+    } else {
+        response.status(404).end();
+    } 
+} );
+
 app.get( '/', (request, response) => {
     response.send('<h1>Hello! This is the server running for part3 exercise</h1>');
 } );
