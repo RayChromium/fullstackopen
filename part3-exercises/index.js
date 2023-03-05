@@ -82,6 +82,10 @@ app.post( '/api/persons', (request, response) => {
         return response.status(400).json( {message: 'person info missing'} );
     }
 
+    if( persons.filter( p => p.name === body.name ).length !== 0 ) {
+        return response.status(400).json( {message: `${body.name} already exist in the book`} );
+    }
+
     const newPerson = {
         id: generateId(),
         name: body.name,
