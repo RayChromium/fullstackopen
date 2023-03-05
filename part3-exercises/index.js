@@ -25,6 +25,18 @@ let persons = [
     }
 ];
 
+const generateId = () =>{
+    let id;
+    while( true ) {
+        id = Math.floor( 1024 * 1024 * Math.random() );
+        if( persons.filter( p => p.id === id ).length === 0 ){
+            break;
+        }
+    }
+    return id;
+}
+
+
 app.get( '/api/persons', (request, response) => {
     response.json(persons);
 } );
@@ -60,6 +72,24 @@ app.delete( '/api/persons/:id', (request, respond) => {
     persons = persons.filter( person => person.id !== id );
 
     respond.status(204).end();
+} );
+
+app.post( '/api/persons', (request, response) => {
+    const body = request.body;
+    console.log('post request body:', body);
+
+    if( !body.name || !body.number ) {
+        return response.status(400).json( {message: 'person info missing'} );
+    }
+
+    const newPerson = {
+        id: generateId(),
+        name: body.name,
+        number: body.number,
+    }
+    console.log('new person: ', newPerson);
+    persons = persons.concat(newPerson);
+    response.json(newPerson);
 } );
 
 const PORT = 3001;
