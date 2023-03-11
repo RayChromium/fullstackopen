@@ -1,6 +1,8 @@
+require('dotenv').config();
 const express = require('express');
 const morgan = require('morgan');
 const cors = require('cors');
+const Person = require('./modules/person');
 const app = express();
 app.use(express.json());
 app.use(cors());
@@ -56,7 +58,17 @@ const generateId = () =>{
 
 
 app.get( '/api/persons', (request, response) => {
-    response.json(persons);
+    Person.find({})
+          .then( result => {
+            // result.forEach( person => {
+            //     response.json(person);
+            // } );
+            response.json(result);
+          } )
+          .catch( error => {
+            console.log('error fetching person from mongoDB:', error.message);
+            return response.status(500).json({message: `Fetch error from MongoDB: ${error.message}`});
+          } );
 } );
 
 app.get( '/api/persons/:id', (request, response) => {
