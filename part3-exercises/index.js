@@ -112,18 +112,30 @@ app.post( '/api/persons', (request, response) => {
         return response.status(400).json( {message: 'person info missing'} );
     }
 
-    if( persons.filter( p => p.name === body.name ).length !== 0 ) {
-        return response.status(400).json( {message: `${body.name} already exist in the book`} );
-    }
+    // check name in fetched data from MongoDB
+    Person.find({name: body.name})
+          .then( result => {
+            if( result.length !== 0 ) {
+                return response.status(400).json( {message: `${body.name} already exist in the book`} );
+            }
+            // No need an id field?
+            const newPerson = new Person({
+                name: body.name,
+                number: body.number,
+            });
+            console.log('new person: ', newPerson);
+            newPerson.save()
+                     .then( result => {
+                        console.log(`added ${newPerson.name} number ${newPerson.number} to phonebook`);
+                        response.json(newPerson);
+                     } )
+                     .catch( error => {
+                        console.log(`Error occured when saving ${newPerson.name} to MongoDB, message:`, error.message);
+                        return response.status(500).json({message: `Error occured when saving ${newPerson.name} to MongoDB, message: ${error.message}`})
+                     } );
+          } )
 
-    const newPerson = {
-        id: generateId(),
-        name: body.name,
-        number: body.number,
-    }
-    console.log('new person: ', newPerson);
-    persons = persons.concat(newPerson);
-    response.json(newPerson);
+    
 } );
 
 const PORT = process.env.PORT || 3001;
