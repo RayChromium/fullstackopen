@@ -6,7 +6,18 @@ DELETE http://localhost:3001/api/notes/2
 
 ###
 
-get http://localhost:3001/api/notes/2
+# valid get by id
+get http://localhost:3001/api/notes/640c7e921379d545129e1b2a
+
+### 
+
+# invalid get by id (404 not found)
+get http://localhost:3001/api/notes/5c41c90e84d891c15dfa3431
+
+### 
+
+# invalid get by id (invalid id, 400 bad request)
+get http://localhost:3001/api/notes/5c41c90e8_d891c1-dfa3431
 
 ### 
 

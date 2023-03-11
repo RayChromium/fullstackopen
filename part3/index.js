@@ -47,19 +47,20 @@ app.get('/api/notes', (request, response) => {
 
 app.get('/api/notes/:id', (request, response) => {
     // console.log('request.params.id:',request.params.id);
-    const id = Number(request.params.id);
-    const note = notes.find( note => {
-        // console.log(note.id, typeof note.id, id, typeof id, note.id === id);
-        return note.id === id;
-      } );
-    // console.log('note:',note);
-
-    // undifined will be false. other things are true(including null)
-    if(note) {
-        response.json(note);
-    } else {
-        response.status(404).end();
-    }
+    // const id = Number(request.params.id);
+    // note that the findById take in the id as a String now, so don't convert
+    Note.findById(request.params.id)
+        .then( note => {
+            if(note) {
+                response.json(note);
+            } else {
+                response.status(404).end();
+            }
+        } )
+        .catch( error => {
+            console.log(error);
+            response.status(400).send({ error: 'malformatted id' });
+        } )
 });
 
 app.delete( '/api/notes/:id', (request, response) => {
