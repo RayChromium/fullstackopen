@@ -45,7 +45,7 @@ app.get('/api/notes', (request, response) => {
     } );
 });
 
-app.get('/api/notes/:id', (request, response) => {
+app.get('/api/notes/:id', (request, response, next) => {
     // console.log('request.params.id:',request.params.id);
     // const id = Number(request.params.id);
     // note that the findById take in the id as a String now, so don't convert
@@ -58,8 +58,7 @@ app.get('/api/notes/:id', (request, response) => {
             }
         } )
         .catch( error => {
-            console.log(error);
-            response.status(400).send({ error: 'malformatted id' });
+            next(error);
         } )
 });
 
@@ -99,11 +98,25 @@ app.post( '/api/notes', (request, response) => {
     } );
 } );
 
+// the handler dealing with unknown endpoint cannot come before routes
 const unknownEndpoint = (request, response) => {
     response.status(404).send({error:'Unknown Endpoint'});
 }
 
 app.use( unknownEndpoint );
+
+// handler of requests with result to errors must come at the end
+const errorHandler = ( error, request, response, next ) => {
+    console.log(error.message);
+
+    if(error.name === 'CastError') {
+        return response.status(400).send({ error: 'malformatted id' });
+    }
+
+    next(error);
+}
+
+app.use(errorHandler);
 
 const PORT =  process.env.PORT || 3001;
 
