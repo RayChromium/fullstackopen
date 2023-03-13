@@ -33,4 +33,10 @@ Content-Type: application/json
 HEAD http://localhost:3001/api/notes
 
 ### 
-PUT http://localhost:3001/api/notes
+PUT http://localhost:3001/api/notes/640c7ef81379d545129e1b2f
+Content-Type: application/json
+
+{
+    "content" : "Modifying a mongoose posted note via PUT",
+    "important" : true
+}
