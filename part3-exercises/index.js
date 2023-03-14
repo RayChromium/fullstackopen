@@ -47,7 +47,7 @@ let persons = [
 ];
 
 
-app.get( '/api/persons', (request, response) => {
+app.get( '/api/persons', (request, response, next) => {
     Person.find({})
           .then( result => {
             // result.forEach( person => {
@@ -55,10 +55,7 @@ app.get( '/api/persons', (request, response) => {
             // } );
             response.json(result);
           } )
-          .catch( error => {
-            console.log('error fetching person from mongoDB:', error.message);
-            return response.status(500).json({message: `Fetch error from MongoDB: ${error.message}`});
-          } );
+          .catch( error => next(error) );
 } );
 
 app.get( '/api/persons/:id', (request, response) => {
@@ -86,7 +83,7 @@ app.get( '/info', (request, response) => {
     `);
 } );
 
-app.delete( '/api/persons/:id', (request, respond) => {
+app.delete( '/api/persons/:id', (request, respond, next) => {
 
     Person.findByIdAndRemove(request.params.id)
           .then( result => {
@@ -95,13 +92,10 @@ app.delete( '/api/persons/:id', (request, respond) => {
             // The 204 (No Content) status code indicates that the server has successfully fulfilled the request and that there is no additional content to send in the response content.
             respond.status(204).end();
         } )
-        .catch( error => {
-            console.log('somehow cannot delete from mongoDB, message:', error.message);
-            respond.status(500).json({message: error.message});
-        } );
+        .catch( error => next(error) );
 } );
 
-app.post( '/api/persons', (request, response) => {
+app.post( '/api/persons', (request, response, next) => {
     const body = request.body;
     console.log('post request body:', body);
 
@@ -126,14 +120,24 @@ app.post( '/api/persons', (request, response) => {
                         console.log(`added ${newPerson.name} number ${newPerson.number} to phonebook`);
                         response.json(newPerson);
                      } )
-                     .catch( error => {
-                        console.log(`Error occured when saving ${newPerson.name} to MongoDB, message:`, error.message);
-                        return response.status(500).json({message: `Error occured when saving ${newPerson.name} to MongoDB, message: ${error.message}`})
-                     } );
+                     .catch( error => next(error) );
           } )
+          .catch( error => next(error) );
 
     
 } );
+
+const errorHandler = ( error, request, response, next ) => {
+    console.log(error.message);
+
+    if( error.name === 'CastError' ) {
+        return response.status(400).send({ error: 'malformatted id' });
+    }
+
+    next(error);
+}
+
+app.use(errorHandler);
 
 const PORT = process.env.PORT || 3001;
 
