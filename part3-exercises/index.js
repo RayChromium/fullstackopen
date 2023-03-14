@@ -3,6 +3,7 @@ const express = require('express');
 const morgan = require('morgan');
 const cors = require('cors');
 const Person = require('./modules/person');
+const { response } = require('express');
 const app = express();
 app.use(express.json());
 app.use(cors());
@@ -45,17 +46,6 @@ let persons = [
     }
 ];
 
-const generateId = () =>{
-    let id;
-    while( true ) {
-        id = Math.floor( 1024 * 1024 * Math.random() );
-        if( persons.filter( p => p.id === id ).length === 0 ){
-            break;
-        }
-    }
-    return id;
-}
-
 
 app.get( '/api/persons', (request, response) => {
     Person.find({})
@@ -97,11 +87,18 @@ app.get( '/info', (request, response) => {
 } );
 
 app.delete( '/api/persons/:id', (request, respond) => {
-    const id = Number(request.params.id);
-    console.log(`delete id: ${id}, type: ${typeof id}`);
-    persons = persons.filter( person => person.id !== id );
 
-    respond.status(204).end();
+    Person.findByIdAndRemove(request.params.id)
+          .then( result => {
+            // https://www.rfc-editor.org/rfc/rfc9110.html#name-204-no-content
+            // 204 No Content
+            // The 204 (No Content) status code indicates that the server has successfully fulfilled the request and that there is no additional content to send in the response content.
+            respond.status(204).end();
+        } )
+        .catch( error => {
+            console.log('somehow cannot delete from mongoDB, message:', error.message);
+            respond.status(500).json({message: error.message});
+        } );
 } );
 
 app.post( '/api/persons', (request, response) => {
