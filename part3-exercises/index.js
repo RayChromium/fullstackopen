@@ -59,15 +59,14 @@ app.get( '/api/persons', (request, response, next) => {
 } );
 
 app.get( '/api/persons/:id', (request, response) => {
-    const id = Number(request.params.id);
-    console.log(`get id: ${id}, type: ${typeof id}`);
-    const person = persons.find( p => p.id === id );
-    console.log(`person: ${person}`);
-    if(person) {
-        response.json(person);
-    } else {
-        response.status(404).end();
-    } 
+    // const id = Number(request.params.id);
+    // console.log(`get id: ${id}, type: ${typeof id}`);
+    console.log(request.params.id);
+    Person.findById(request.params.id)
+          .then( person => {
+            response.json(person);
+          } )
+          .catch( error => next(error) );
 } );
 
 app.get( '/', (request, response) => {
@@ -77,10 +76,15 @@ app.get( '/', (request, response) => {
 app.get( '/info', (request, response) => {
     console.log(request.body);
     const date = new Date();
-    response.send(`
-        <p>Phonebook has info for ${persons.length} people</p>
-        <p>${date[Symbol.toPrimitive]('string')}</p>
-    `);
+    Person.countDocuments( {} )
+            .then( number => {
+                console.log('number returned by Person.countDocuments( {} ): ', number);
+                response.send(`
+                    <p>Phonebook has info for ${persons.length} people</p>
+                    <p>${date[Symbol.toPrimitive]('string')}</p>
+                `);
+            } )
+            .catch(error => next(error));
 } );
 
 app.delete( '/api/persons/:id', (request, respond, next) => {

@@ -14,6 +14,14 @@ Content-Type: application/json
 
 GET http://localhost:3001/api/persons
 
+###
+
+GET http://localhost:3001/api/persons/640ad721705b7ed6650143a5
+
+###
+
+GET http://localhost:3001/info
+
 ### 
 
 PUT http://localhost:3001/api/persons/640ad721705b7ed6650143a5
