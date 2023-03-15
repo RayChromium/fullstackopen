@@ -127,6 +127,23 @@ app.post( '/api/persons', (request, response, next) => {
     
 } );
 
+app.put( '/api/persons/:id', ( request, response, next ) => {
+    const body = request.body;
+    console.log('body:', body);
+    console.log('request.params.id: ', request.params.id);
+
+    const person = {
+        name: body.name,
+        number: body.number
+    }
+
+    Person.findByIdAndUpdate( request.params.id, person, { new: true } )
+          .then( updatedPerosn => {
+            response.json(updatedPerosn);
+          } )
+          .catch( error => next(error) );
+} )
+
 const errorHandler = ( error, request, response, next ) => {
     console.log(error.message);
 

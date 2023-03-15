@@ -24,16 +24,16 @@ const App = () => {
 
   const addEntry = (e) => {
     e.preventDefault();
-    console.log('add button pressed, value in input:', newName);
-    const newPerson = {
-      name: newName,
-      number: newNumber,
-      id: persons.length + 1,
-    }
+    console.log('add button pressed, value in input:', e.target);
+    
 
     const targetIndex = persons.findIndex( person => person.name === newName );
 
     if( targetIndex === -1 ) {
+      const newPerson = {
+        name: newName,
+        number: newNumber,
+      }
       numberService.addNewEntry(newPerson)
            .then( res => {
             console.log('newPerson added to server, respond:', res);
@@ -48,12 +48,20 @@ const App = () => {
             alert('add fail');
            } )
     } else {
-      newPerson.id = targetIndex + 1;
+      const newPerson = {
+        name: newName,
+        number: newNumber,
+      }
+      newPerson.id = persons[targetIndex].id;
+      console.log('id:',newPerson.id);
       numberService.updateEntry( newPerson.id, newPerson )
                    .then( addRes => {
                     console.log( `update ${newPerson.name} success, respond:`, addRes);
+                    setPersons( persons.map( p => p.id !== newPerson.id ? p : newPerson ) );
+                   } )
+                   .catch( error => {
+                    console.log(error.message);
                    } );
-      setPersons( persons.map( p => p.id !== newPerson.id ? p : newPerson ) );
       setNewName('');
       setNewNumber('');
     }
