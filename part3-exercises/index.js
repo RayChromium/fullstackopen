@@ -78,9 +78,8 @@ app.get( '/info', (request, response) => {
     const date = new Date();
     Person.countDocuments( {} )
             .then( number => {
-                console.log('number returned by Person.countDocuments( {} ): ', number);
                 response.send(`
-                    <p>Phonebook has info for ${persons.length} people</p>
+                    <p>Phonebook has info for ${number} people</p>
                     <p>${date[Symbol.toPrimitive]('string')}</p>
                 `);
             } )
