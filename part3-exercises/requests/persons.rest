@@ -10,6 +10,16 @@ Content-Type: application/json
     "number" : "666-6666"
 }
 
+### 
+
+POST http://localhost:3001/api/persons
+Content-Type: application/json
+
+{
+    "name": "dog",
+    "number" : "666-6666"
+}
+
 ###
 
 GET http://localhost:3001/api/persons

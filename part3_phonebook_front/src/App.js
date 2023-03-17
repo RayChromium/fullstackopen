@@ -45,7 +45,8 @@ const App = () => {
            } )
            .catch( err => {
             console.error('can\'t add to server, error:', err);
-            alert('add fail');
+            setMessage({level: 'error', content: err.response.data.error});
+            setTimeout( () => setMessage(null), 3000 );
            } )
     } else {
       const newPerson = {
