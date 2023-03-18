@@ -10,7 +10,7 @@ app.use(cors());
 app.use(express.static('build'));
 morgan.token( 'reqBody' , (request, response) => {
     return JSON.stringify(request.body);
-})
+});
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :reqBody'));
 
 const requestLogger = (request, response, next) => {
@@ -19,54 +19,54 @@ const requestLogger = (request, response, next) => {
     console.log( 'Body: ', request.body );
     console.log('---');
     next();
-}
+};
 
 app.use(requestLogger);
 
 
 app.get( '/api/persons', (request, response, next) => {
     Person.find({})
-          .then( result => {
+        .then( result => {
             // result.forEach( person => {
             //     response.json(person);
             // } );
             response.json(result);
-          } )
-          .catch( error => next(error) );
+        } )
+        .catch( error => next(error) );
 } );
 
-app.get( '/api/persons/:id', (request, response) => {
+app.get( '/api/persons/:id', (request, response, next) => {
     // const id = Number(request.params.id);
     // console.log(`get id: ${id}, type: ${typeof id}`);
     console.log(request.params.id);
     Person.findById(request.params.id)
-          .then( person => {
+        .then( person => {
             response.json(person);
-          } )
-          .catch( error => next(error) );
+        } )
+        .catch( error => next(error) );
 } );
 
 app.get( '/', (request, response) => {
     response.send('<h1>Hello! This is the server running for part3 exercise</h1>');
 } );
 
-app.get( '/info', (request, response) => {
+app.get( '/info', (request, response, next) => {
     console.log(request.body);
     const date = new Date();
     Person.countDocuments( {} )
-            .then( number => {
-                response.send(`
+        .then( number => {
+            response.send(`
                     <p>Phonebook has info for ${number} people</p>
                     <p>${date[Symbol.toPrimitive]('string')}</p>
                 `);
-            } )
-            .catch(error => next(error));
+        } )
+        .catch(error => next(error));
 } );
 
 app.delete( '/api/persons/:id', (request, respond, next) => {
 
     Person.findByIdAndRemove(request.params.id)
-          .then( result => {
+        .then( result => {
             // https://www.rfc-editor.org/rfc/rfc9110.html#name-204-no-content
             // 204 No Content
             // The 204 (No Content) status code indicates that the server has successfully fulfilled the request and that there is no additional content to send in the response content.
@@ -85,7 +85,7 @@ app.post( '/api/persons', (request, response, next) => {
 
     // check name in fetched data from MongoDB
     Person.find({name: body.name})
-          .then( result => {
+        .then( result => {
             if( result.length !== 0 ) {
                 return response.status(400).json( {message: `${body.name} already exist in the book`} );
             }
@@ -96,16 +96,14 @@ app.post( '/api/persons', (request, response, next) => {
             });
             console.log('new person: ', newPerson);
             newPerson.save()
-                     .then( result => {
-                        console.log(`added ${newPerson.name} number ${newPerson.number} to phonebook`);
-                        response.json(newPerson);
-                     } )
-                     .catch( error => next(error) );
-          } )
-          .catch( error => next(error) );
-
-    
-} );
+                .then( result => {
+                    console.log(`added ${newPerson.name} number ${newPerson.number} to phonebook`);
+                    response.json(newPerson);
+                } )
+                .catch( error => next(error) );
+        } )
+        .catch( error => next(error) );
+});
 
 app.put( '/api/persons/:id', ( request, response, next ) => {
     const body = request.body;
@@ -115,14 +113,14 @@ app.put( '/api/persons/:id', ( request, response, next ) => {
     const person = {
         name: body.name,
         number: body.number
-    }
+    };
 
     Person.findByIdAndUpdate( request.params.id, person, { new: true } )
-          .then( updatedPerosn => {
+        .then( updatedPerosn => {
             response.json(updatedPerosn);
-          } )
-          .catch( error => next(error) );
-} )
+        } )
+        .catch( error => next(error) );
+});
 
 const errorHandler = ( error, request, response, next ) => {
     console.log(error.message);
@@ -134,7 +132,7 @@ const errorHandler = ( error, request, response, next ) => {
     }
 
     next(error);
-}
+};
 
 app.use(errorHandler);
 
