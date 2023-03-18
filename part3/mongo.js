@@ -7,7 +7,7 @@ if(process.argv.length < 3) {
 
 const password = process.argv[2];
 
-const url = `mongodb+srv://raychromium:${password}@fullstackopen-p3.xixbwjc.mongodb.net/noteApp?retryWrites=true&w=majority`; 
+const url = `mongodb+srv://raychromium:${password}@fullstackopen-p3.xixbwjc.mongodb.net/noteApp?retryWrites=true&w=majority`;
 mongoose.set('strictQuery', false);
 mongoose.connect(url);
 
@@ -34,4 +34,4 @@ Note.find({}).then( result => {
     console.log(result);
     result.forEach( note => console.log(note) );
     mongoose.connection.close();
-} )
+} );

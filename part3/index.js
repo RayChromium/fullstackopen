@@ -13,7 +13,7 @@ const requestLogger = (request, response, next) => {
     console.log( 'Body: ', request.body );
     console.log('---');
     next();
-}
+};
 
 app.use(requestLogger);
 
@@ -41,7 +41,7 @@ app.get('/api/notes/:id', (request, response, next) => {
         } )
         .catch( error => {
             next(error);
-        } )
+        } );
 });
 
 app.delete( '/api/notes/:id', (request, response, next) => {
@@ -65,20 +65,20 @@ app.put('/api/notes/:id', (request, response, next) => {
         return response.status(400).json({ error: 'content missing' });
     }
 
-    const {content, important} = body;
+    const { content, important } = body;
 
-    Note.findByIdAndUpdate(request.params.id, 
-                           {content, important}, 
-                           { new:true, runValidators:true, context: 'query' })
+    Note.findByIdAndUpdate(request.params.id,
+        { content, important } ,
+        { new:true, runValidators:true, context: 'query' })
         .then( updatedNote => {
             response.json(updatedNote);
         } )
-        .catch( error => next(error) )
-})
+        .catch( error => next(error) );
+});
 
 app.post( '/api/notes', (request, response, next) => {
     const body = request.body;
-    
+
     console.log('body:', body);
     // aka: body.content is undefined:
     if(!body.content) {
@@ -92,17 +92,16 @@ app.post( '/api/notes', (request, response, next) => {
     });
 
     note.save()
-    .then( savedNote => {
-        response.json(savedNote);
-    } )
-    .catch( error => next(error) )
-    ;
+        .then( savedNote => {
+            response.json(savedNote);
+        } )
+        .catch( error => next(error) );
 } );
 
 // the handler dealing with unknown endpoint cannot come before routes
 const unknownEndpoint = (request, response) => {
-    response.status(404).send({error:'Unknown Endpoint'});
-}
+    response.status(404).send({ error:'Unknown Endpoint' });
+};
 
 app.use( unknownEndpoint );
 
@@ -113,16 +112,16 @@ const errorHandler = ( error, request, response, next ) => {
     if(error.name === 'CastError') {
         return response.status(400).send({ error: 'malformatted id' });
     } else if( error.name === 'ValidationError' ) {
-        return response.status(400).json({error: error.message});
+        return response.status(400).json({ error: error.message });
     }
 
     next(error);
-}
+};
 
 app.use(errorHandler);
 
 const PORT =  process.env.PORT || 3001;
 
-app.listen(PORT,()=>{
+app.listen(PORT,() => {
     console.log(`Server running on port ${PORT}`);
-})
+});
