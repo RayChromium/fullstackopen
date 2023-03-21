@@ -1,6 +1,7 @@
 const express = require('express');
 const logger = require('./utils/logger');
 const config = require('./utils/config');
+const Blog = require('./models/blog');
 const cors = require('cors');
 const mongoose = require('mongoose');
 const app = express();
@@ -12,10 +13,16 @@ const blogSchema = new mongoose.Schema({
     likes: Number,
 });
 
-const Blog = mongoose.model('Blog', blogSchema);
+mongoose.set('strictQuery', false);
 
 const mongoUrl = config.MONGODB_URI;
-mongoose.connect(mongoUrl);
+mongoose.connect(mongoUrl)
+    .then( result => {
+        logger.info('connected to MongoDB');
+    })
+    .catch( error => {
+        logger.error('Failed to connect to MongoDB, message:', error.message);
+    } );
 
 app.use(cors());
 app.use(express.json());
