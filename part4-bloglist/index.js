@@ -5,6 +5,7 @@ const middleware = require('./utils/middleware');
 const Blog = require('./models/blog');
 const cors = require('cors');
 const mongoose = require('mongoose');
+const blog = require('./models/blog');
 const app = express();
 
 const blogSchema = new mongoose.Schema({
@@ -30,7 +31,7 @@ app.use(express.json());
 
 app.use(middleware.requestLogger);
 
-app.get( '/api/blogs', (request, response) => {
+app.get( '/api/blogs', (request, response, next) => {
     Blog
         .find({})
         .then( blogs => {
@@ -38,7 +39,16 @@ app.get( '/api/blogs', (request, response) => {
         } );
 } );
 
-app.post('/api/blogs', (request, response) => {
+app.get('/api/blogs/:id', (request, response, next) =>{
+    Blog.findById( request.params.id )
+        .then( returnedPost => {
+            logger.info(returnedPost);
+            response.json(returnedPost);
+        } )
+        .catch( error => next(error) );
+});
+
+app.post('/api/blogs', (request, response, next) => {
     const blog = new Blog(request.body);
 
     blog

@@ -17,3 +17,7 @@ Content-Type: application/json
 GET http://localhost:3003/api/blogo
 
 ###
+# get by id
+GET http://localhost:3003/api/blogs/6419cfb49e9d16b32ccb27a7
+
+###
