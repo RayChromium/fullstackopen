@@ -2,7 +2,7 @@ const express = require('express');
 const logger = require('./utils/logger');
 const config = require('./utils/config');
 const middleware = require('./utils/middleware');
-const Blog = require('./models/blog');
+const blogsRouter = require('./controllers/blogs');
 const cors = require('cors');
 const mongoose = require('mongoose');
 const blog = require('./models/blog');
@@ -31,32 +31,7 @@ app.use(express.json());
 
 app.use(middleware.requestLogger);
 
-app.get( '/api/blogs', (request, response, next) => {
-    Blog
-        .find({})
-        .then( blogs => {
-            response.json(blogs);
-        } );
-} );
-
-app.get('/api/blogs/:id', (request, response, next) =>{
-    Blog.findById( request.params.id )
-        .then( returnedPost => {
-            logger.info(returnedPost);
-            response.json(returnedPost);
-        } )
-        .catch( error => next(error) );
-});
-
-app.post('/api/blogs', (request, response, next) => {
-    const blog = new Blog(request.body);
-
-    blog
-        .save()
-        .then(result => {
-            response.status(201).json(result);
-        });
-});
+app.use( '/api/blogs/', blogsRouter );
 
 // unknown endpoint router handler must come after all valid routers
 app.use(middleware.unknownEndpoint);
