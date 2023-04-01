@@ -24,7 +24,7 @@ notesRouter.get('/:id', (request, response, next) => {
         } );
 });
 
-notesRouter.post( '/api/notes', (request, response, next) => {
+notesRouter.post( '/', (request, response, next) => {
     const body = request.body;
 
     logger.info('body:', body);
@@ -41,7 +41,7 @@ notesRouter.post( '/api/notes', (request, response, next) => {
 
     note.save()
         .then( savedNote => {
-            response.json(savedNote);
+            response.status(201).json(savedNote);
         } )
         .catch( error => next(error) );
 } );
