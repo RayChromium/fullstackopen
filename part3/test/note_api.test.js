@@ -87,7 +87,7 @@ test('note without content is not added', async () => {
 test('a specific note can be viewed', async () => {
     const notesAtStart = await helper.notesInDB();
 
-    const noteToView = notesAtStart;
+    const noteToView = notesAtStart[0];
 
     const resultNote = await api
         .get(`/api/notes/${noteToView.id}`)
