@@ -6,7 +6,11 @@ const noteSchema = new mongoose.Schema({
         minLength: 5,
         required: true
     },
-    user:String,
+    // only when ref is defined can the database know how to populate
+    user:{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
+    },
     important:Boolean
 });
 noteSchema.set('toJSON', {
