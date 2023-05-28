@@ -51,3 +51,13 @@ Content-Type: application/json
     "content" : "Modifying a mongoose posted note via PUT",
     "important" : true
 }
+
+### 
+POST http://localhost:3001/api/notes
+Content-Type: application/json
+
+{
+    "content" : "User id is the creator, a mongoose posted note with userId",
+    "important" : true,
+    "userId": "6472cffb1d5767fb9902f97c"
+}

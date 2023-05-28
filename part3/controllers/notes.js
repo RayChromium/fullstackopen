@@ -1,5 +1,6 @@
 const notesRouter = require('express').Router();
 const Note = require('../models/note');
+const User = require('../models/user');
 const logger = require('../utils/logger');
 
 notesRouter.get('/', async (request, response) => {
@@ -35,6 +36,8 @@ notesRouter.get('/:id', async (request, response) => {
 notesRouter.post( '/', async (request, response) => {
     const body = request.body;
 
+    const user = await User.findById(body.userId);
+
     logger.info('body:', body);
     // aka: body.content is undefined:
     if(!body.content) {
@@ -45,6 +48,7 @@ notesRouter.post( '/', async (request, response) => {
     const note = new Note({
         content: body.content,
         important: body.important || false,
+        user: user.id,
     });
 
     // note.save()
@@ -53,6 +57,8 @@ notesRouter.post( '/', async (request, response) => {
     //     } )
     //     .catch( error => next(error) );
     const savedNote = await note.save();
+    user.notes = user.notes.concat(savedNote._id);
+    await user.save();
     response.status(201).json(savedNote);
 } );
 
