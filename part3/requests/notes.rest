@@ -61,3 +61,15 @@ Content-Type: application/json
     "important" : true,
     "userId": "6472cffb1d5767fb9902f97c"
 }
+
+### 
+
+# posting a note with token authorization
+POST http://localhost:3001/api/notes
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IlJheUNocm9taXVtIiwiaWQiOiI2NDcyY2ZmYjFkNTc2N2ZiOTkwMmY5N2MiLCJpYXQiOjE2ODYzODQ2NTB9.zz7dM-STLvUENjsZrgU6i9MIw88s8DbxAuouV5XlHpE
+
+{
+    "content" : "yet another token authorized user posted note",
+    "important" : true
+}
