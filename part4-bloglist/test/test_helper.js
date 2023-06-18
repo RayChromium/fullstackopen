@@ -1,3 +1,5 @@
+const User = require('../models/user');
+
 const listMultiple = [
     {
         _id: '5a422a851b54a676234d17f7',
@@ -88,7 +90,13 @@ const initialBlogs = [
     },
 ];
 
+const usersInDb = async () => {
+    const users = await User.find({});
+    return users.map( u => u.toJSON() );
+};
+
 module.exports = {
     listMultiple,
     initialBlogs,
+    usersInDb,
 };
