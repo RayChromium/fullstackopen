@@ -5,6 +5,7 @@ const logger = require('../utils/logger');
 blogsRouter.get( '/', (request, response, next) => {
     Blog
         .find({})
+        .populate('user')
         .then( blogs => {
             response.json(blogs);
         } )
