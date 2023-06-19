@@ -57,3 +57,36 @@ describe( 'when there is initially one user in db', () => {
         expect(usersAtEnd).toEqual(usersAtStart);
     });
 } );
+
+describe( 'username and password are at least 3 characters long to be created', () => {
+
+    test( 'creation need to fail with a 3-char long username', async () => {
+        const usersAtStart = await helper.usersInDb();
+        const newUser = {
+            username: 'mlu',
+            name: 'Matti Luukkainen',
+            password: 'salainen',
+        };
+
+        await api
+            .post('/api/users')
+            .send(newUser)
+            .expect(400)
+            .expect('Content-Type', /application\/json/);
+    } );
+
+    test( 'creation need to fail with a 3-char long password', async () => {
+        const usersAtStart = await helper.usersInDb();
+        const newUser = {
+            username: 'mluukkai',
+            name: 'Matti Luukkainen',
+            password: 'sal',
+        };
+
+        await api
+            .post('/api/users')
+            .send(newUser)
+            .expect(400)
+            .expect('Content-Type', /application\/json/);
+    } );
+} );
