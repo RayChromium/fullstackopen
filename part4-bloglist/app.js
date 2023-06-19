@@ -4,6 +4,7 @@ const config = require('./utils/config');
 const middleware = require('./utils/middleware');
 const blogsRouter = require('./controllers/blogs');
 const userRouter = require('./controllers/users');
+const loginRouter = require('./controllers/login');
 const cors = require('cors');
 const mongoose = require('mongoose');
 const app = express();
@@ -27,6 +28,8 @@ app.use(middleware.requestLogger);
 app.use( '/api/blogs/', blogsRouter );
 
 app.use( '/api/users/', userRouter );
+
+app.use( '/api/login/', loginRouter );
 
 // unknown endpoint router handler must come after all valid routers
 app.use(middleware.unknownEndpoint);
