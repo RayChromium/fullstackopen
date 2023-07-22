@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react'
 import Blog from './components/Blog'
 import blogService from './services/blogs'
 import loginServeice from './services/login'
-import login from './services/login'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
@@ -18,6 +17,8 @@ const App = () => {
       const user = await loginServeice.login( {
         username, password,
       } )
+      window.localStorage.setItem('loggedBloglistUser', JSON.stringify(user));
+      blogService.setToken(user.token)
       setUser(user);
       setUsername('')
       setPassword('')
@@ -30,6 +31,15 @@ const App = () => {
     blogService.getAll().then(blogs =>
       setBlogs( blogs )
     )  
+  }, [])
+
+  useEffect(() => {
+    const loggedUserJSON = window.localStorage.getItem('loggedBloglistUser')
+    if(loggedUserJSON) {
+      const user = JSON.parse(loggedUserJSON)
+      setUser(user)
+      blogService.setToken(user.token)
+    }
   }, [])
 
   if (user === null) {
