@@ -23,8 +23,15 @@ const App = () => {
       setUsername('')
       setPassword('')
     } catch (exception) {
-      console.error(exception);
+      console.error(exception)
     }
+  }
+
+  const handleLogout = event => {
+    event.preventDefault()
+    window.localStorage.removeItem('loggedBloglistUser')
+    setUser(null)
+    blogService.removeToken()
   }
 
   useEffect(() => {
@@ -73,6 +80,10 @@ const App = () => {
 
   return (
     <div>
+      <div>
+        <h3>Logged in User: {user.username}</h3>
+        <button on onClick={handleLogout}>Log out</button>
+      </div>
       <h2>blogs</h2>
       {blogs.map(blog =>
         <Blog key={blog.id} blog={blog} />

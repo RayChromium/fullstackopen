@@ -7,6 +7,10 @@ const setToken = newToken => {
   token = `Bearer ${newToken}`
 }
 
+const removeToken = () => {
+  token = null
+}
+
 const getAll = () => {
   const request = axios.get(baseUrl)
   return request.then(response => response.data)
@@ -22,4 +26,4 @@ const create = async newObject => {
 }
 
 // eslint-disable-next-line import/no-anonymous-default-export
-export default { getAll, create, setToken }
+export default { getAll, create, setToken, removeToken }
