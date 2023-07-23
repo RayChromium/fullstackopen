@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import Blog from './components/Blog'
 import blogService from './services/blogs'
 import loginServeice from './services/login'
+import Notification from './components/Notification'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
@@ -11,6 +12,7 @@ const App = () => {
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
   const [url, setUrl] = useState('')
+  const [message, setMessage] =  useState(null);
 
   const handleLogin = async (event) => {
     event.preventDefault();
@@ -22,11 +24,15 @@ const App = () => {
       } )
       window.localStorage.setItem('loggedBloglistUser', JSON.stringify(user));
       blogService.setToken(user.token)
+      setMessage( { level: 'info', content: `Logged in as ${user.username}` } )
+      setTimeout( () => setMessage(null), 3000 );
       setUser(user);
       setUsername('')
       setPassword('')
     } catch (exception) {
       console.error(exception)
+      setMessage( { level: 'error', content: exception } )
+      setTimeout( () => setMessage(null), 3000 );
     }
   }
 
@@ -35,6 +41,8 @@ const App = () => {
     window.localStorage.removeItem('loggedBloglistUser')
     setUser(null)
     blogService.removeToken()
+    setMessage( { level: 'info', content: `${user.username} logged out` } )
+      setTimeout( () => setMessage(null), 3000 );
   }
 
   const createNewBlog = async event => {
@@ -51,8 +59,12 @@ const App = () => {
       setAuthor('')
       setUrl('')
       setBlogs( blogs.concat(response) )
+      setMessage( { level: 'info', content: `Post added` } )
+      setTimeout( () => setMessage(null), 3000 );
     } catch( exception ) {
       console.error(exception)
+      setMessage( { level: 'error', content: exception } )
+      setTimeout( () => setMessage(null), 3000 );
     }
   }
 
@@ -102,6 +114,7 @@ const App = () => {
 
   return (
     <div>
+      <Notification message={message} />
       <h2>blogs</h2>
       <div>
         <h3>Logged in User: {user.username}</h3>
