@@ -1,5 +1,5 @@
 import './App.css';
-import {useState, useEffect} from 'react';
+import {useState, useEffect, useRef} from 'react';
 import Note from './components/Note'
 import noteService from './services/notes';
 import loginService from './services/login';
@@ -39,6 +39,7 @@ const App = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [user, setUser] = useState(null);
+  const noteFormRef = useRef()
 
   useEffect( () => {
     console.log('effect');
@@ -64,6 +65,7 @@ const App = () => {
   const notesToShow = showAll ? notes : notes.filter( note => note.important === true );
 
   const addNote = (noteObject) => {
+    noteFormRef.current.toggleVisiblity();
     noteService
         .create(noteObject)
         .then( returnedNote => {
@@ -110,6 +112,16 @@ const App = () => {
           setNotes( notes.filter(note => note.id !== id) );
          } );
   }
+
+  
+  const noteForm = () => (
+    <Togglable buttonLabel='new note' ref={noteFormRef}>
+      <NoteForm
+        createNote={addNote} 
+      />
+    </Togglable>
+  )
+
   return (
     <div>
       <h1>Notes</h1>
@@ -129,13 +141,7 @@ const App = () => {
 
       {user && <div>
        <p>{user.name} is logged in</p>
-         {
-          <Togglable buttonLabel='new note'>
-            <NoteForm
-              createNote={addNote} 
-            />
-          </Togglable>
-         }
+        {noteForm()}
       </div>}
 
       <div>
