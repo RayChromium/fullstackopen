@@ -32,3 +32,16 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IlJhe
     "url": "",
     "likes": 1919810
 }
+
+###
+# like a blog via updating with put request
+PUT http://localhost:3003/api/blogs/64d157e015f85cb647d3d24c
+Content-Type: application/json
+
+{
+    "user": "6490592d2ccc4bf827de0e1b",
+    "likes": 1,
+    "author": "Cai Rui ddg",
+    "title": "blog with author?",
+    "url": "wanderingray.com"
+}

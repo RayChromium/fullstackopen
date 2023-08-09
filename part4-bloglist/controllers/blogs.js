@@ -32,4 +32,20 @@ blogsRouter.post('/', async (request, response) => {
     response.status(201).json(result);
 });
 
+blogsRouter.put('/:id', async (request, response) =>{
+    logger.info('put request:', request.body);
+    const likes = request.body.likes;
+    try{
+        const returnedPost = await Blog.findByIdAndUpdate( request.params.id, { $inc:{likes: 1} }, {new:true} );
+        logger.info(returnedPost);
+        if( !returnedPost ){
+            response.status(404).json({error: 'cannot find the blog to be liked'});
+        }
+
+        response.json(returnedPost);
+    } catch (error) {
+        response.status(500).json({error:'SHTF put request handling in server'})
+    }
+});
+
 module.exports = blogsRouter;
