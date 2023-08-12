@@ -123,7 +123,8 @@ const App = () => {
         <h3>Create New</h3>
         {createBlogForm()}
       </div>
-      {blogs.map(blog =>
+      {blogs.sort( (blog1, blog2) => Number(blog2.likes) - Number(blog1.likes) )
+      .map(blog =>
         <Blog key={blog.id} blog={blog} setBlogs={setBlogs} />
       )}
     </div>
