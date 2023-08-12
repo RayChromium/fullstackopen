@@ -11,6 +11,7 @@ const BlogForm = ( {createNewBlog, setMessage} ) => {
             title: title,
             author: author,
             url: url,
+            likes: 0
         };
         try{
             await createNewBlog(newObject);
